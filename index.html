@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css">
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
+    });
+  </script>
+  <script type="text/javascript" src="../MathJax.js?config=TeX-AMS_HTML-full"></script>
 </head>
 <title class="center">Beyond Vision</title>
 <link rel="shortcut icon" type="image/x-icon" href="logo_equipo.ico" />
@@ -11,6 +17,10 @@
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-2019.css">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
 <body style="background-color:#4682B4">
 
 <!-- Navbar -->
@@ -18,6 +28,7 @@
   <div class="w3-bar w3-teal w3-top w3-left-align w3-large">
     <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
     <a href="#whatwedo" class="w3-bar-item w3-button w3-hide-small w3-hover-teal">What we do</a>
+    <a href="#whatwedo" class="w3-bar-item w3-button w3-hide-small w3-hover-teal">Management</a>
 	<a href="#ourteam" class="w3-bar-item w3-button w3-hide-small w3-hover-teal">Our team</a>
     <a href="#news" class="w3-bar-item w3-button w3-hide-small w3-hover-teal">News</a>
     <a href="#contact" class="w3-bar-item w3-button w3-hide-small w3-hover-teal">Contact</a>
@@ -42,7 +53,7 @@ images can have single of multiple symmetry, and consist on very different objec
 buildings, road signs, or butterflies for instance.</p>
 
     </div>
-    <div class="w3-container">
+    <div class="w3-container w3-center">
       <div class="row">
 	   <div class="column">
 		<img src="ejemplo_1.png"  class="hover-shadow">
@@ -56,12 +67,9 @@ buildings, road signs, or butterflies for instance.</p>
        <div class="column">
         <img src="ejemplo_4.png"  class="hover-shadow">
        </div>
-	   <div class="column">
-        <img src="ejemplo_5.png"  class="hover-shadow">
-       </div>
     </div>
-	
     </div>
+
 	<div class="w3-container w3-2019-bluestone w3-round-large">
 	<p> Why did we select this benchmark?
 	</p>
@@ -72,13 +80,225 @@ buildings, road signs, or butterflies for instance.</p>
 	  <li>It tries to detect automatically a feature of objects that human beings can detect instantaneously</li>
 	  <li>Many algorithms studied throughout the course may have to be applied, mainly related to transformations and segmentation</li>	
 	 </ul> 
-     </div>
-	 </br>
-	<div class="w3-container w3-2019-bluestone w3-round-large">
-		<p> Explain our progress
-		</p>
+  </div>
+
+</br>
+
+<div class="w3-container w3-2019-bluestone w3-round-large">
+    <h3>Algorithm description</h3>
+    <p> Our method is based on the gradient information. The reasons why this was the chosen method are multiple: it has a simple implementation, it can be applied on images with multiple objects, and mostly because no prior segmentation is necessary. In fact, some authors use it as feature extraction of the image to detect objects within the image, so it can help in their separation.
+    </p>
+     
+    <p>
+      The proposed algorithm employs only the original gray scale image and the gradient information of the image. The directions of the symmetry axes are obtained from the gradient orientation histogram of the input gray scale image by using the Fourier method, as the self-convolution -or autocorrelation- of the histogram is carried out.
+    </p>
+
+    <p>
+      The algortihm can be summarized in:
+
+      <ol>
+        <li>Perform a gradient operation on the image.</li>
+        <li>Obtain the gradient orientation histogram.</li>
+        <li>Search for the convolution peaks of the gradient orientation histogram by using the Fourier transform to obtain the orientations of symmetry axes.</li>
+        <li>Obtain sub-angular positional accuracy by fitting a polynomic function, and finding the peak position analytically.</li>
+        <li>Perform symmetry check or evaluation about the obtained symmetry axes.</li>
+        <li>Obtain the position of this symmetry axis by using the center of mass of the object.</li>
+        <li>Draw the symmetry axes based on the orientation and position information obtained.</li>
+      </ol>
+    </p>
+      <p>
+        An image gradient is a directional change in the intensity or color in an image. The gradient of the image is one of the fundamental building blocks in image processing. Mathematically, the gradient of image intensity function at each image point is a 2D vector with the components given by the derivatives in the horizontal and vertical directions. At each image point, the gradient vector points in the direction of largest possible intensity increase, and the length of the gradient vector corresponds to the rate of change in that direction. For an object surface described by I(x,y) , the surface gradient vector:
+      </p>
+
+      <p>
+        $$I_x = {\partial I(x,y)\over \partial x} \qquad I_y = {\partial I(x,y)\over \partial y}    $$
+      </p>
+
+      <p>
+        The orientation vector is:
+      </p>
+
+      <p>
+       $$ \varphi = arctan{I_x \over I_y} \qquad \varphi \; \epsilon \; [0,2\pi] $$
+      </p>
+
+      <p>
+        With the previous formulation, the histogram of a gradient orientation image can thus be obtained. For the histogram, the number of bins can be specified. In order to have better angular resolution, the bin number can be chosen to be larger than 360. It can be also observed that for a symmetric object in the image, its orientation histogram is also symmetric with a period 360 degrees.
+      </p>
+
+      <div class="w3-center">
+        <img src="tech1.png"  class="hover-shadow">
+      </div>
+
+      <p>
+        Using the histogram function of the image, the orientation of the symettry is the value x which gives the maximal value for c(x):
+      </p>
+
+      <p>
+        $$ c(x)=\int_{0}^{\pi}h(x+\theta)\cdot h(x-\theta)d\theta $$
+      </p>
+
+      <p>
+        Due to the periodic nature of the histogram function, and as the integral can be approximated by a sum of the discretized orientation histogram, this operation a correlation between the segments of the gradient orientation histogram, therefore it consists on a convolution. In this project, the Fourier method is used to perform the convolution and to obtain the symmetry information of the original image. </br> </br>
+        For a reflectionally symmetric object, its gradient orientation histogram h(i) will be reflectionally symmetric or nearly so at one or more orientation angles. The convolution of histogram h(i) with itself will produce peaks at those symmetry angles. </br> </br>
+        This convolution can be easily obtained by the Fourier transform. Based on the following convolution theorem:
+      </p>
+
+      <p>
+        $$ f(x)\ast g(x) \Leftrightarrow F(u) \cdot G(u) $$
+      </p>
+
+      <p>
+        The convolution in the space domain can be obtained by taking the inverse Fourier transform of the product F(u)G(u). In our case F(u)=G(u)=H(u). Therefore, we have 
+      </p>
+
+      <p>
+        $$ h(i)\ast h(i)\Leftrightarrow H(u)\cdot H(u)=H^2(u) $$
+      </p>
+
+      <p>
+        The accuracy of the orientations of the symmetry axes obtained by searching the peak positions in the convolution function can be improved by fitting a polynomic function to the histogram function. </br> </br>
+In most of the gradient orientation histograms, due to digitalization effects in the edges, large peaks often appear at multiples of 45º (0º, 45º, 90º, 135º, 180º, 225º, 270º, and 315º). This effect can be reduced by increasing the kernel size in the gradient operation. However, it is hard to eliminate the effect completely just by increasing the kernel size, therefore a median filter of size 5 is applied to the orientation histogram. </br> </br>
+After the directions of the symmetry axes have been obtained, it is also necessary to determine the position of these lines. The center of gravity of the image can be used for determining the position of the symmetry axes. This procedure is done using the function regionpropsin the software Matlab.
+
+      </p>
+  </div>
+
+</br>
+
+  <div class="w3-container w3-2019-bluestone w3-round-large">
+    <h3>Results obtained</h3>
+    <p>
+      To compare the proposed points with the ground truth in the datasets, it was required to stablish a metric that states the acceptance or not of the proposal. For this problem, there is a commonly used metric that is based on the distance and the difference of angles between the centroid of the ground truth axis versus the proposed by the algorithm.
+    </p>
+    <ul>
+      <li> Angle metric </li>
+      <p>
+        $$ \left | \Phi_G -\Phi_D \right |<10 $$
+      </p>
+      <li> Location metric </li>
+      <p>
+        $$ \Delta_{G,D} < {1 \over 5} min{L_G,L_D} $$
+      </p>
+    </ul>
+
+    <p>
+      The state of art shows a tendency in the use of precision-recall curve to join the metric results of all the images in the dataset. This curve also allows the visual comparison for the performance of different algorithms being precision the percentage of results that are relevant and recall the percentage of relevant results correctly classified. The standard notation stands that TP are the True Positive events, FP are the False Positive and FN the False Negative. For the evaluation of the symmetry axis problem TP corresponds to the ground truth segments with at least one proposed segment near, FN are the ground truth segments that do not have proposed segments near and FP are the proposed segment that are not near any ground truth segments.
+    </p>
+
+    <ul>
+      <li> Precision: </li>
+      <p>
+        $$ {TP \over TP+FP} $$
+      </p>
+      <li> Recall: </li>
+      <p>
+        $$ {TP \over TP + FN} $$
+      </p>
+    </ul>
+
+    <p>
+      The following images are test results samples from the benchmark dataset, where the ground truth lines are shown in green and the proposed by the algorithm are in blue.
+    </p>
+
+    <div class="w3-container w3-center">
+      <div class="row">
+	   <div class="column">
+		<img src="res_1.png"  class="hover-shadow">
+	   </div>
+       <div class="column">
+        <img src="res_2.png"  class="hover-shadow">
+       </div>
+       <div class="column">
+        <img src="res_3.png"  class="hover-shadow">
+       </div>
+       <div class="column">
+        <img src="res_4.png"  class="hover-shadow">
+       </div>
     </div>
-	</div>
+    </div>
+
+    <p>
+      The results using the NYU benchmark dataset show that the NYU algorithm outperforms the proposed algorithm. The proposed one reaches a precision around 57% (percentage of relevant results) with 56% of recall (percentage of relevant results correctly classified) while the NYU algorithm reaches a 78% precision with 76% of recall. For the maximum precision reached by the proposed algorithm, the NUY surpasses it having around 80% of recall.
+    </p>
+
+    <div class="w3-center">
+      <img src="res_5.png"  class="hover-shadow">
+     </div>
+
+     <p>
+      The figure shows that the precision of the proposed algorithm goes around 65% and 40% with a small recall variation, which means the algorithm remains around the 48% of the relevant results classified correctly.
+    </p>
+
+<p>
+  Regarding the execution time performance, the proposed and benchmark algorithms where evaluated under the same machine of specifications: Processor Intel i7-7500 @ 2.7 GHz, RAM of 16 GM and operating system Windows 10 Home. The results indicate that there is a large temporary gap between the two results, where the proposed solution outdoes the benchmark performance by more than 9 seconds per image. 
+</p>
+
+<div class="w3-center">
+  <img src="res_6.png"  class="hover-shadow">
+ </div>
+</br>
+ 
+    <p> Some videos of our project:
+    </p>
+		<div class="w3-container w3-center">
+      <div class="row">
+	   <div class="column">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/HMu73zEMSvg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+	   </div>
+     <div class="column">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/gEGNjqvvj28" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+       </div>
+    </div>
+    </div>
+  </div>
+
+  <div class="w3-container w3-2019-bluestone w3-round-large w3-center">
+		
+  </div>
+
+    </div>
+    
+    <div class="w3-row w3-padding-32" id="organize" style="margin-left:30px ;margin-right:30px">
+        <div class="w3-container w3-white w3-round-large">
+         <h1 class="w3-text-teal">How do we organize our work?</h1>
+     </div>
+     </br>
+     <div class="w3-container w3-2019-bluestone w3-round-large">
+       <p>Project management software helps project managers and teams complete all the project requirements and manage time. There are many options, but we chose Wrike as our management software, because it offered a student account with almost all the premium services. This software allows us to share different kind of files and manage them as a team or by own. The second tool that we used was Google Drive, due to all their advantages like writing a document in real time or creating a folder with some collaborators. The last one was WhatsApp for instant messaging.</p>
+     </div>
+
+    </div>
+    <div class="w3-container w3-center">
+      <div class="row">
+	   <div class="column">
+		<img src="org1.png"  class="hover-shadow" height="102" width="180">
+	   </div>
+       <div class="column">
+        <img src="org2.png"  class="hover-shadow" height="102" width="240">
+       </div>
+       <div class="column">
+        <img src="org3.png"  class="hover-shadow" height="102" width="102">
+       </div>
+    </div>
+
+    <div class="w3-container w3-2019-bluestone w3-round-large">
+        <p>This webpage is fully programmed in HTML, with graphic design language CSS and interpreted language JavaScript.</p>
+      </div>
+      <div class="w3-container w3-center">
+        <div class="row">
+         <div class="column">
+          <img src="doc1.png"  class="hover-shadow" height="202" width="180">
+         </div>
+         <div class="column">
+          <img src="doc2.png"  class="hover-shadow" height="202" width="180">
+         </div>
+         <div class="column">
+          <img src="doc3.png"  class="hover-shadow" height="202" width="180">
+         </div>
+      </div>
+   </div>
+
   <div class="w3-row w3-padding-32" style="margin-left:30px ;margin-right:30px" id="ourteam">
 	<div class="w3-container w3-white w3-round-large">
       <h1 class="w3-text-teal">Our team</h1>
@@ -87,7 +307,7 @@ buildings, road signs, or butterflies for instance.</p>
        <div class="row">
 		  <div class="column">
 			<div class="card w3-2019-bluestone w3-round-large" style="text-align:center">
-				<img src="ejemplo_5.png" style="width:auto" class="center">
+				
 				<div class="container">
 				  <div class="card w3-teal w3-round-large" style="text-align:center">
 					<h3 style="font-family:courier;font-size: 40px">Estefan&iacutea</h3>
@@ -100,7 +320,7 @@ buildings, road signs, or butterflies for instance.</p>
 
 		  <div class="column">
 			<div class="card w3-2019-bluestone w3-round-large" style="text-align:center">
-				<img src="ejemplo_5.png" style="width:auto" class="center">
+				
 				<div class="container">
 				  <div class="card w3-teal w3-round-large" style="text-align:center">
 					<h3 style="font-family:courier;font-size: 40px">Rodrigo</h3>
@@ -113,7 +333,7 @@ buildings, road signs, or butterflies for instance.</p>
 
 		  <div class="column">
 			<div class="card w3-2019-bluestone w3-round-large" style="text-align:center">
-				<img src="ejemplo_5.png" style="width:auto" class="center">
+				
 				<div class="container">
 				  <div class="card w3-teal w3-round-large" style="text-align:center">
 					<h3 style="font-family:courier;font-size: 40px">Juan</h3>
@@ -126,7 +346,7 @@ buildings, road signs, or butterflies for instance.</p>
 		<div class="column">
 			<div class="col s12 m3">
 				<div class="card w3-2019-bluestone w3-round-large" style="text-align:center">
-				  <img src="ejemplo_5.png" style="width:auto" class="center">
+				  
 				  <div class="container">
 				  <div class="card w3-teal w3-round-large" style="text-align:center">
 					<h3 style="font-family:courier;font-size: 40px">Emiliano</h3>
@@ -140,7 +360,7 @@ buildings, road signs, or butterflies for instance.</p>
 		
 		<div class="column">
 			<div class="card w3-2019-bluestone w3-round-large" style="text-align:center">
-				<img src="ejemplo_5.png" style="width:auto" class="center">
+				
 				<div class="container">
 				  <div class="card w3-teal w3-round-large" style="text-align:center">
 					<h3 style="font-family:courier;font-size: 40px">Sorelys</h3>
@@ -171,7 +391,7 @@ buildings, road signs, or butterflies for instance.</p>
   </div>
   <div class="row">
     <div class="column">
-      <img src="logo_equipo.PNG" style="width:100%">
+      <img src="logo_equipo.png" style="width:100%">
     </div>
     <div class="column w3-container w3-2019-bluestone w3-round-large w3-padding-32">
       <form action="/action_page.php">
